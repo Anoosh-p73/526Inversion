@@ -33,7 +33,7 @@ public class PlayerMovement : MonoBehaviour
             MoveForward();
         if(Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
             MoveBackward();
-        if (Input.GetKey(KeyCode.Space))
+        if (Input.GetKey(KeyCode.Space) || Input.GetKey(KeyCode.UpArrow))
             Jump();
     }
 
@@ -43,22 +43,22 @@ public class PlayerMovement : MonoBehaviour
     }
 
     void MoveForward() {
-        print("Going RIght");
+        // print("Going RIght");
         // if(currVelocity < 0) 
         if(currVelocity > velocityThreshold) rb.AddForce(Vector3.right * continueForce, ForceMode.Acceleration);
         else rb.AddForce(Vector3.right * fullForce, ForceMode.Acceleration);
     }
     void MoveBackward() {
-        print("Going Left");
+        // print("Going Left");
         // if (currVelocity > 0) rb.AddForce(Vector3.left * fullForce, ForceMode.Impulse);
         if (currVelocity < -velocityThreshold) rb.AddForce(Vector3.left * continueForce, ForceMode.Impulse);
         else rb.AddForce(Vector3.left * fullForce, ForceMode.Impulse);
     }
 
     void Jump() {
-        print("Trying to jump");
+        // print("Trying to jump");
         if (!isGround) return;
-        print("Sucessfully jumped");
+       //  print("Sucessfully jumped");
         isGround = false;
         //rb.AddForce(new Vector3(0, jumpForce, 0), ForceMode.Impulse);
         rb.AddForce(Vector3.up * jumpForce, ForceMode.Acceleration);
@@ -68,12 +68,16 @@ public class PlayerMovement : MonoBehaviour
     private void OnCollisionStay(Collision collision) {
         if (collision.collider.tag == "Moving" || collision.collider.tag == "Stationary" || collision.collider.tag == "Ground") {
             isGround = true;
-            Debug.Log("Grounded");
+            // Debug.Log("Grounded");
         } else {
             isGround = false;
 
-            Debug.Log("Not Grounded!");
+            // Debug.Log("Not Grounded!");
         }
+    }
+
+    public void Reset() {
+        rb.Sleep();
     }
 
 }
