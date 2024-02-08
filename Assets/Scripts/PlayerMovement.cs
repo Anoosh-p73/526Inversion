@@ -29,17 +29,20 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
-            MoveForward();
-        if(Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
-            MoveBackward();
-        if (Input.GetKey(KeyCode.Space) || Input.GetKey(KeyCode.UpArrow))
-            Jump();
+        
     }
 
     private void FixedUpdate() {
         rb.AddForce(Vector3.down * jumpForce * gravityMultiplier, ForceMode.Acceleration);
         currVelocity = rb.velocity.x;
+
+        /*if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
+            MoveForward();
+        if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
+            MoveBackward();*/
+        if (Input.GetKey(KeyCode.Space) || Input.GetKey(KeyCode.UpArrow))
+            Jump();
+
     }
 
     void MoveForward() {

@@ -12,7 +12,7 @@ public class PlayerReset : MonoBehaviour
     private void Update() {
         if (player.transform.position.y < resetHeight) {
             player.transform.position = respawnPoint.position;
-            player.GetComponent<PlayerMovement>().Reset();
+            // player.GetComponent<PlayerMovement>().Reset();
         }
             
     }

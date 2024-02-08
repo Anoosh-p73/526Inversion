@@ -7,7 +7,10 @@ public class MovingPlatformScript : MonoBehaviour
 
     Vector3 defaultPos;
     public float speed = 3.0f;  
-    public float amplitude = 2.0f; 
+    public float amplitude = 2.0f;
+
+    private GameObject target = null;
+    private Vector3 offset;
 
     private float timeCounter = 0.0f;
 
@@ -15,6 +18,7 @@ public class MovingPlatformScript : MonoBehaviour
     void Start()
     {
         defaultPos = transform.position;
+        target = null;
     }
 
     // Update is called once per frame
@@ -29,13 +33,29 @@ public class MovingPlatformScript : MonoBehaviour
 
     }
 
-    private void OnCollisionStay(Collision collision) {
-        if (collision.collider.tag == "Player") {
-            
-            transform.parent = collision.transform;
 
-        }
+    void OnTriggerStay(Collider col) {
+        target = col.gameObject;
+        offset = target.transform.position - transform.position;
     }
+    void OnTriggerExit(Collider col) {
+        target = null;
+    }
+
+    void LateUpdate() {
+        if (target != null) {
+            target.transform.position = transform.position + offset;
+        }
+
+    }
+
+    /*    private void OnCollisionStay(Collision collision) {
+            if (collision.collider.tag == "Player") {
+                print($"Collided: {collision.gameObject.name}");
+                transform.parent = collision.transform;
+
+            }
+        }*/
 
     /*    function OnTriggerStay(other:Collider) {
 
