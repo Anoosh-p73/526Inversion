@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Stationary
   - Moving
+  - Ground
   layers:
   - Default
   - TransparentFX
