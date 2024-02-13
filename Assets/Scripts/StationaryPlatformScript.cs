@@ -24,7 +24,8 @@ public class StationaryPlatformScript : MonoBehaviour
     }
 
     private void OnCollisionEnter(Collision collision) {
-        touched = true;
+        if(GameManager.Instance.State != GameManager.GameState.MirrorLevel)
+            touched = true;
     }
 
 }

@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEditorInternal.ReorderableList;
+using UnityEngine.InputSystem.EnhancedTouch;
 using static UnityEngine.Rendering.VolumeComponent;
 
 [RequireComponent(typeof(Rigidbody))]
@@ -40,6 +42,10 @@ public class PlayerMovement : MonoBehaviour
     }
 
     private void FixedUpdate() {
+        if (GameManager.Instance.State == GameManager.GameState.MirrorLevel) {
+            XIntent *= -1;
+        }
+
         rb.AddForce(Vector3.down * jumpForce * gravityMultiplier, ForceMode.Acceleration);
         currVelocity = rb.velocity.x;
 
@@ -49,7 +55,7 @@ public class PlayerMovement : MonoBehaviour
 
         Vector3 velocity = rb.velocity;
         Vector3 velocityChange = (targetVelocity - velocity);
-        
+
         velocityChange.x = Mathf.Clamp(velocityChange.x, -maxVelocityChange, maxVelocityChange);
         velocityChange.z = 0;
         velocityChange.y = 0;

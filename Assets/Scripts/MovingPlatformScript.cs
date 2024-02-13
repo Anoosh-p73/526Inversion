@@ -35,8 +35,10 @@ public class MovingPlatformScript : MonoBehaviour
     }
 
     private void OnCollisionEnter(Collision collision) {
-        touched = true;
-        mirrorLevelTransform = transform;
+        if (GameManager.Instance.State != GameManager.GameState.MirrorLevel){
+            touched = true;
+            mirrorLevelTransform = transform;
+        }
     }
 
     void OnTriggerStay(Collider col) {
