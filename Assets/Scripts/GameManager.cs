@@ -5,7 +5,7 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
 
-    private static GameManager Instance;
+    public static GameManager Instance;
 
     public enum GameState { InitialLevel, MirrorLevel, PauseGame}
 
@@ -24,5 +24,4 @@ public class GameManager : MonoBehaviour
             Instance = null;
         }
     }
-
 }

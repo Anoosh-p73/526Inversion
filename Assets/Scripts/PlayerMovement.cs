@@ -1,14 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEngine.Rendering.VolumeComponent;
 
 [RequireComponent(typeof(Rigidbody))]
 public class PlayerMovement : MonoBehaviour
 {
 
     Rigidbody rb;
-    [SerializeField] private float fullForce;
-    [SerializeField] private float continueForce;
+    [SerializeField] private float speed = 10.0f;
+    [SerializeField] private float gravity = 10.0f;
+    [SerializeField] private float maxVelocityChange = 10.0f;
+
     [SerializeField] private float jumpForce;
 
     [SerializeField] private float gravityMultiplier;
@@ -18,44 +21,44 @@ public class PlayerMovement : MonoBehaviour
     private bool isGround = true;
     private float currVelocity = 0f;
 
-
+    float XIntent = 0;
+    float ZIntent = 0;
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         rb = GetComponent<Rigidbody>();
+        rb.freezeRotation = true;
+        rb.useGravity = false;
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        XIntent = 0;
+        XIntent = Input.GetAxis("Horizontal");
     }
 
     private void FixedUpdate() {
         rb.AddForce(Vector3.down * jumpForce * gravityMultiplier, ForceMode.Acceleration);
         currVelocity = rb.velocity.x;
 
-        /*if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
-            MoveForward();
-        if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
-            MoveBackward();*/
+        Vector3 targetVelocity = new Vector3(XIntent, 0, 0);
+
+        targetVelocity *= speed;
+
+        Vector3 velocity = rb.velocity;
+        Vector3 velocityChange = (targetVelocity - velocity);
+        
+        velocityChange.x = Mathf.Clamp(velocityChange.x, -maxVelocityChange, maxVelocityChange);
+        velocityChange.z = 0;
+        velocityChange.y = 0;
+
+        rb.AddForce(velocityChange, ForceMode.VelocityChange);
+
         if (Input.GetKey(KeyCode.Space) || Input.GetKey(KeyCode.UpArrow))
             Jump();
 
-    }
-
-    void MoveForward() {
-        // print("Going RIght");
-        // if(currVelocity < 0) 
-        if(currVelocity > velocityThreshold) rb.AddForce(Vector3.right * continueForce, ForceMode.Acceleration);
-        else rb.AddForce(Vector3.right * fullForce, ForceMode.Acceleration);
-    }
-    void MoveBackward() {
-        // print("Going Left");
-        // if (currVelocity > 0) rb.AddForce(Vector3.left * fullForce, ForceMode.Impulse);
-        if (currVelocity < -velocityThreshold) rb.AddForce(Vector3.left * continueForce, ForceMode.Impulse);
-        else rb.AddForce(Vector3.left * fullForce, ForceMode.Impulse);
     }
 
     void Jump() {

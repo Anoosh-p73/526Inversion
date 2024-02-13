@@ -12,7 +12,9 @@ public class MovingPlatformScript : MonoBehaviour
     private GameObject target = null;
     private Vector3 offset;
 
-    private float timeCounter = 0.0f;
+    private bool touched = false;
+
+    Transform mirrorLevelTransform;
 
     // Start is called before the first frame update
     void Start()
@@ -24,15 +26,18 @@ public class MovingPlatformScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        float pingpong = Mathf.PingPong(Time.time * 5, 4);
-        transform.position = new Vector3(defaultPos.x + pingpong, defaultPos.y, defaultPos.z);
-        /*timeCounter += Time.deltaTime * speed;
-        float xPosition = Mathf.Lerp(-amplitude, amplitude, Mathf.SmoothStep(0.0f, 1.0f, Mathf.Sin(timeCounter)));
-
-        transform.position = new Vector3(defaultPos.x + xPosition, transform.position.y, transform.position.z);*/
-
+        if (!touched || GameManager.Instance.State == GameManager.GameState.InitialLevel) {
+            float pingpong = Mathf.PingPong(Time.time * 5, 4);
+            transform.position = new Vector3(defaultPos.x + pingpong, defaultPos.y, defaultPos.z);
+        } else if (GameManager.Instance.State == GameManager.GameState.MirrorLevel && touched) {
+            transform.position = mirrorLevelTransform.position;
+        }
     }
 
+    private void OnCollisionEnter(Collision collision) {
+        touched = true;
+        mirrorLevelTransform = transform;
+    }
 
     void OnTriggerStay(Collider col) {
         target = col.gameObject;
@@ -48,22 +53,5 @@ public class MovingPlatformScript : MonoBehaviour
         }
 
     }
-
-    /*    private void OnCollisionStay(Collision collision) {
-            if (collision.collider.tag == "Player") {
-                print($"Collided: {collision.gameObject.name}");
-                transform.parent = collision.transform;
-
-            }
-        }*/
-
-    /*    function OnTriggerStay(other:Collider) {
-
-            if (other.gameObject.tag == "platform") {
-                transform.parent = other.transform;
-
-            }
-        }*/
-
 
 }
